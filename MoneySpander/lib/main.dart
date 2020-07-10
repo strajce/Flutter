@@ -1,6 +1,9 @@
+import './widgets/chart.dart';
+import './widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import './transaction.dart';
+
+import './widgets/transaction_list.dart';
+import './models/transaction.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,113 +11,90 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter App',
+      title: 'Money Spander',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        accentColor: Colors.amber,
+      ),
       home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final List<Transactio> transaction = [
-    Transactio(
-        id: "0", title: "New PS4", amount: 220, spandingDate: DateTime.now()),
-    Transactio(
-        id: "1",
-        title: "Spiderman GOTY",
-        amount: 18,
-        spandingDate: DateTime.now()),
-  ];
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  void _startAddNewTransaction(BuildContext buildContext) {
+    showModalBottomSheet(
+        context: buildContext,
+        builder: (_) {
+          return NewTransaction(_addNewTransaction);
+        });
+  }
+
+  final List<Transaction> _userTransaction = [];
+
+  List<Transaction> get _recentTransactions {
+    return _userTransaction.where((element) {
+      return element.spandingDate
+          .isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
+
+  void _addNewTransaction(String title, double amount, DateTime date) {
+    final newTransaction = Transaction(
+        id: DateTime.now().toString(),
+        title: title,
+        amount: amount,
+        spandingDate: date);
+
+    setState(() {
+      _userTransaction.add(newTransaction);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((element) => element.id == id);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter App'),
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Card(
-              child: Text("Card Chart"),
-              color: Colors.yellow,
-              elevation: 5,
+        appBar: AppBar(
+          title: Text('Money Spander'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                _startAddNewTransaction(context);
+              },
             ),
-          ),
-          Card(
-            elevation: 5,
-            child: Container(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Title'),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(labelText: 'Amount'),
-                  ),
-                  FlatButton(
-                    child: Text('Add Transaction'),
-                    textColor: Colors.green,
-                    onPressed: () {},
-                  )
-                ],
+          ],
+        ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.symmetric(
+                vertical: 5,
+                horizontal: 10,
               ),
+              width: double.infinity,
+              child: Chart(_recentTransactions),
             ),
-          ),
-          Card(
-            elevation: 5,
-            child: Container(
-              child: Column(
-                children: transaction.map((tx) {
-                  return Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(8),
-                        child: Text(
-                          '\€: ${tx.amount}',
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 2,
-                          ),
-                        ),
-                        padding: EdgeInsets.all(10),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            tx.title.toString(),
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            DateFormat('dd/MM/yyyy').format(tx.spandingDate),
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+            TransactionList(_userTransaction, _deleteTransaction),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            _startAddNewTransaction(context);
+          },
+        ));
   }
 }
