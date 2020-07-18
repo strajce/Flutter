@@ -12,11 +12,13 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
       child: _transactions.isEmpty
           ? Column(
               children: <Widget>[
-                Text('No transation added yet!'),
+                Text(
+                  'No transation added yet!',
+                  style: Theme.of(context).textTheme.headline2,
+                ),
                 SizedBox(
                   height: 20,
                 ),
