@@ -1,0 +1,4 @@
+#Mon Jun 29 13:01:05 CEST 2020
+base.0=/Users/s.vuckovic/Desktop/Strahinja/Flutter Projects/Flutter/MoneySpander/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
