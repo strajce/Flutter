@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './screens/categories_screen.dart';
 import './screens/categories_meals_screen.dart';
+import 'screens/meal_details_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +24,8 @@ class MyApp extends StatelessWidget {
               ),
               body2: TextStyle(
                 color: Color.fromRGBO(20, 51, 51, 1),
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
               title: TextStyle(
                 fontFamily: 'RobotoCondensed',
@@ -34,7 +37,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //default value
       routes: {
         '/': (context) => CategoriesScreen(),
-        CategoriesMealsScreen.routeName: (context) => CategoriesMealsScreen()
+        CategoriesMealsScreen.routeName: (context) => CategoriesMealsScreen(),
+        MealDetailsScreen.routeName: (context) => MealDetailsScreen()
       },
       onGenerateRoute: (settings) {
         print(settings.arguments);
