@@ -4,6 +4,7 @@ import '../dummy_data.dart';
 import '../items/category_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  static const routeName = '/categories-screen';
   @override
   Widget build(BuildContext context) {
     return GridView(
