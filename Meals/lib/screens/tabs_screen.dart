@@ -29,7 +29,7 @@ class _TabsScreenState extends State<TabsScreen> {
         title: Text(_pages[_selectedPageIndex]['title']),
       ),
       drawer: Drawer(
-        child: MainDrawer(),
+        child: MainDrawer('Meals'),
       ),
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(

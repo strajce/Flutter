@@ -4,6 +4,10 @@ import '../screens/categories_screen.dart';
 import '../screens/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
+  final String title;
+
+  MainDrawer(this.title);
+
   Widget buildListTile(String title, IconData icon, Function tapHandler) {
     return ListTile(
       leading: Icon(icon),
@@ -24,27 +28,28 @@ class MainDrawer extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          height: 120,
+          height: 100,
           width: double.infinity,
           padding: const EdgeInsets.all(20),
           alignment: Alignment.centerLeft,
           color: Theme.of(context).accentColor,
           child: Text(
-            'Your meal up!',
+            title,
             style: TextStyle(
-                fontSize: 30,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           ),
         ),
+        Divider(),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
         buildListTile('Meals', Icons.restaurant, () {
-          Navigator.of(context).pushNamed('/');
+          Navigator.of(context).pushReplacementNamed('/');
         }),
         buildListTile('Settings', Icons.settings, () {
-          Navigator.of(context).pushNamed(SettingsScreen.routeName);
+          Navigator.of(context).pushReplacementNamed(SettingsScreen.routeName);
         }),
       ],
     );
